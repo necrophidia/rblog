@@ -2,22 +2,23 @@
 <html>
 <head>
   <title>R Blog</title>
+  <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <%= yield(:head) %>
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
-    <div id="container" class="container">
-      <header>
-        <%= render 'layouts/navigation' %>
-        <%= render 'layouts/messages' %>
-      </header>
-      <div id="main" role="main">
-        <%= yield %>
-      </div>
-      <footer>
-      </footer>
-    </div> <!--! end of #container -->
+	<header>
+		<%= render 'layouts/navigation' %>
+	</header>
+	
+	<div id="content" class="container">
+		<%= render 'layouts/messages' %>
+		<%= yield %>
+	</div>
+	
+	<footer>
+	</footer>
   </body>
 </html>

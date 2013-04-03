@@ -11,27 +11,114 @@
  *= require_self
  *= require_tree .
  */
-.brand {
-  float: left;
-  padding-right: 8px;
+ 
+body{
+	background: #efefef;
+	margin: 0;
+	padding: 0;
+	border-top: #ee1c4b 1px solid;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
-ul.nav {
-  list-style: none;
-  margin: 0 0 2em;
-  padding: 0;
+ 
+a{
+	text-decoration: none;
+	color: #ee1c4b;
 }
-ul.nav li {
-  display: inline;
+
+.container{
+	width: 960px;
+	margin: 0 auto;
 }
+
+#header{
+	background: #fff;
+	height: 90px;
+	padding: 20px;
+	border-top: #efefef 4px solid;
+}
+
+#header .logo{
+	float: left;
+}
+
+#header .logo a{
+	display:inline-block;
+	background: transparent url('/r_blog.png') no-repeat;
+	padding-left: 110px;
+	height: 90px;
+	font-size: 2.4em;
+	line-height: 2.4em;
+	text-shadow: 4px 4px 2px rgba(150, 150, 150, 0.6);
+}
+
+#content{
+	color: #646869;
+	background: #fff;
+	padding: 20px;
+	-webkit-box-shadow: 4px 4px 11px rgba(50, 50, 50, 0.58);
+	-moz-box-shadow:    4px 4px 11px rgba(50, 50, 50, 0.58);
+	box-shadow:         4px 4px 11px rgba(50, 50, 50, 0.58);
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+#content h2{
+	border-bottom: #646869 1px dotted;
+	text-transform: capitalize;
+}
+
+.clear{
+	clear: both;
+}
+
+ 
+ul#main_nav {
+	list-style: none;
+	margin: 0 0 2em;
+	padding: 0;
+	float: right;
+}
+
+ul#main_nav li {
+	display: inline-block;
+	height: 50px;
+	border-left: #eee 1px solid;
+	padding: 20px;
+	text-transform: capitalize;
+}
+
 #flash_notice, #flash_alert {
   padding: 5px 8px;
   margin: 10px 0;
 }
+
 #flash_notice {
   background-color: #CFC;
   border: solid 1px #6C6;
 }
+
 #flash_alert {
   background-color: #FCC;
   border: solid 1px #C66;
+}
+
+.form_block{
+	display: inline-block;
+	width: 700px;
+	line-height: 30px;
+}
+
+.form_block .label{
+	width: 200px!important;
+	display: inline-block;
+}
+
+.form_block i{
+	font-size: 0.9em;
+}
+
+.form_border{
+	border-top: #646869 1px dotted;
+	margin: 20px 0;
 }
