@@ -1,3 +1,5 @@
 R Blog v0.1
 
-R Blog is a simple blog application based on Ruby on Rails..
+R Blog is a simple blog application based on Ruby on Rails.
+Run 'rake db:create' then 'rake db:migrate' to create the database.
+Run 'rails server' to start the blog.

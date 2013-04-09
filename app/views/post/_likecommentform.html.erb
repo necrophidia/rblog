@@ -13,7 +13,7 @@
 		</div>
   </div>
   
-  <% if !comment.likes.empty? && comment.likes.where(user_id:current_user.id) %>
+  <% if !comment.likes.empty? && !comment.likes.where(:user_id => current_user.id).blank? %>
   	<span class="icon_liked" style="color:#646869;">You Liked This Comment</span> 
   <% else %>
   	<%= f.submit 'Like This Comment', :class => 'like_button icon_like' %> 

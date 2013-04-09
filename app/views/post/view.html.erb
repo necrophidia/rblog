@@ -18,7 +18,7 @@
 			<% like_names = '0' %>
 			<% if !@post.likes.empty? %>
 			<% puts @post.likes.to_s %>
-			<% #like_names = @post.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
+			<% like_names = @post.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
 			<% end %>
 			<span class="icon_like" title="<%= like_names %>">
 				<%= !@post.likes.empty? ? @post.likes.size.to_s : '0' %>
@@ -32,7 +32,7 @@
 			<% post_tags = @post.tag.split(',') %>
 			<div class="icon_tag">
 			<% post_tags.each do |post_tag| %>
-			<%= link_to post_tag.strip, {:controller => "post", :action => "index", :tag => post_tag.strip }, :title => post_tag.strip %>
+			<%= link_to post_tag.strip, {:controller => "post", :action => "index", :tag => post_tag.strip } %>
 			<% end %>
 			</div>
 		</div>
@@ -85,7 +85,7 @@
 					<div class="comment_info_border"></div>
 					<% comment_like_names = '0' %>
 					<% if !comment.likes.empty? %>
-					<% comment_like_names = comment.likes.map{|el| el[:author_name]}.join(', ') %>
+					<% comment_like_names = comment.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
 					<% end %>
 					<span class="icon_like" title="<%= comment_like_names %>">
 						<%= !comment.likes.empty? ? comment.likes.size.to_s : '0' %>
@@ -111,7 +111,7 @@
 							<div class="comment_info_border"></div>
 							<% subcomment_like_names = '0' %>
 							<% if !child_comment.likes.empty? %>
-							<% subcomment_like_names = child_comment.likes.map{|el| el[:author_name]}.join(', ') %>
+							<% subcomment_like_names = child_comment.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
 							<% end %>
 							<span class="icon_sublike" title="<%= subcomment_like_names %>">
 								<%= !child_comment.likes.empty? ? child_comment.likes.size.to_s : '0' %>
