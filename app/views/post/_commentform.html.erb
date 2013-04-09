@@ -1,0 +1,45 @@
+<%= form_for([@post, Comment.new], :url => post_new_comment_path, :method => 'put') do |f| %>
+  
+  <%= hidden_field_tag :current_block_name, @current_block_name.nil? ? '' : @current_block_name %>
+  <%= hidden_field_tag :current_block_height, @current_block_height.nil? ? '' : @current_block_height %>
+  <% author_name = user_signed_in? ? current_user.name: '' %>
+  <% author_mail = user_signed_in? ? current_user.email: '' %>
+
+  <% if !@error.nil? %>
+    <div id="error_explanation">
+      <h3><%= @error %></h3>
+    </div>
+  <% end %>
+  
+  <div class="form_hide">
+	  <div class="form_block">
+	    <%= hidden_field_tag :post_id, @post.id, :readonly => true %>
+	  </div>
+	  
+	  <div class="form_block">
+	    <div class="label"><%= f.label :article_id %></div>
+	    <%= f.number_field :article_id, {:readonly => true, :class => 'input_comment'} %>
+	  </div>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"><%= f.label :author_name %></div>
+    <%= f.text_field :author_name, {:size => 76, :value => author_name, :readonly => user_signed_in?} %>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"><%= f.label :author_mail %></div>
+    <%= f.text_field :author_mail, {:size => 76, :value => author_mail, :readonly => user_signed_in?} %>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"><%= f.label :content %></div>
+    <%= f.text_area :content, :cols => 55 %>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"></div>
+    <%= f.submit 'Save', :class => 'button icon_save' %>
+    <%= submit_tag "Cancel", :type => 'button', :class => 'button_cancel new_comment_close' %>
+  </div>
+<% end %>

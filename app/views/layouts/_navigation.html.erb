@@ -1,23 +1,26 @@
 <div id="header">
 	<div class="container">
 		<div class="logo">
-			<%= link_to "R Blog", root_path %>
+			<%= link_to "R Blog - Simple RoR-based Blog", root_path %>
 		</div>
 
 		<ul id="main_nav">
 			<% if user_signed_in? %>
 				<li>
-					<%= link_to 'My account', edit_user_registration_path %>
+					<%= link_to 'New Post', post_new_path, :class => 'menu_icon icon_post' %>
 				</li>
 				<li>
-					<%= link_to 'Sign out', destroy_user_session_path, :method=>'delete' %>
+					<%= link_to 'My account', edit_user_registration_path, :class => 'menu_icon icon_profile' %>
+				</li>
+				<li>
+					<%= link_to 'Sign out', destroy_user_session_path, :class => 'menu_icon icon_signout', :method=>'delete' %>
 				</li>
 			<% else %>
 				<li>
-					<%= link_to 'Sign up', new_user_registration_path %>
+					<%= link_to 'Sign up', new_user_registration_path, :class => 'menu_icon icon_signup' %>
 				</li>
 				<li>
-					<%= link_to 'Sign in', new_user_session_path %>
+					<%= link_to 'Sign in', new_user_session_path, :class => 'menu_icon icon_signin' %>
 				</li>
 			<% end %>
 		</ul>

@@ -1,0 +1,51 @@
+<% @posts.each do |post| %>
+	<div class="block_content">
+		<h2>
+			<%= link_to post.title, post_view_path(:id => post.id) %>
+		</h2>
+		<div class="post_content">
+			<% if post.content.size > 560 %>
+			<%= post.content.slice(0..560) %>...
+			<%= link_to "read more", post_view_path(:id => post.id), :class => 'read_more' %>
+			<% else %>
+			<%= post.content %>
+			<% end %>
+		</div>
+		<div class="post_info">
+			<div class="post_created">
+				<%= l post.created_at, :format => "%B %d, %Y" %>
+				by <%= post.author_name %>
+			</div>
+			<div class="post_info_border"></div>
+			<div class="comment_like_block">
+				<% like_names = '0' %>
+				<% if !post.likes.empty? %>
+				<% like_names = post.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
+				<% end %>
+				<span class="icon_like" title="<%= like_names %>">
+					<%= !post.likes.empty? ? post.likes.size.to_s : '0' %>
+				</span>
+				<span class="icon_comment">
+					<%= !post.comments.empty? ? post.comments.size.to_s : '0' %>
+				</span>
+			</div>
+			<div class="post_info_border"></div>
+			<div>
+				<% post_tags = post.tag.split(',') %>
+				<div class="icon_tag">
+				<% post_tags.each do |post_tag| %>
+				<%= link_to post_tag.strip, {:controller => "post", :action => "index", :tag => post_tag.strip }, :title => post_tag.strip %>
+				<% end %>
+				</div>
+			</div>
+			<div class="post_info_border"></div>
+			<% if user_signed_in? && (current_user.email == post.author_mail) %>
+			<div>
+				<%= link_to 'Edit', post_update_path(:id => post.id), {:class => 'icon_edit'} %>
+				<%= link_to 'Delete', post_delete_path(:id => post.id), method: :delete, :class => 'icon_delete', data: { confirm: 'Are you sure?' } %>
+			</div>
+			<div class="post_info_border"></div>
+			<% end %>
+		</div>
+	</div>
+<% end %>

@@ -1,0 +1,235 @@
+<div class="block_content">
+
+	<h2>
+	  <%= link_to @post.title, post_view_path(:id => @post.id) %>
+	</h2>
+
+	<div class="post_content" style="margin-top: -20px;">
+	  <%= simple_format(@post.content).html_safe %>
+	</div>
+	
+	<div class="post_info">
+		<div class="post_created">
+			<%= l @post.created_at, :format => "%B %d, %Y" %>
+			by <%= @post.author_name %>
+		</div>
+		<div class="post_info_border"></div>
+		<div class="comment_like_block">
+			<% like_names = '0' %>
+			<% if !@post.likes.empty? %>
+			<% puts @post.likes.to_s %>
+			<% #like_names = @post.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
+			<% end %>
+			<span class="icon_like" title="<%= like_names %>">
+				<%= !@post.likes.empty? ? @post.likes.size.to_s : '0' %>
+			</span>
+			<span class="icon_comment">
+				<%= !@post.comments.empty? ? @post.comments.size.to_s : '0' %>
+			</span>
+		</div>
+		<div class="post_info_border"></div>
+		<div>
+			<% post_tags = @post.tag.split(',') %>
+			<div class="icon_tag">
+			<% post_tags.each do |post_tag| %>
+			<%= link_to post_tag.strip, {:controller => "post", :action => "index", :tag => post_tag.strip }, :title => post_tag.strip %>
+			<% end %>
+			</div>
+		</div>
+		<div class="post_info_border"></div>
+		<% if user_signed_in? && (current_user.email == @post.author_mail) %>
+		<div>
+			<%= link_to 'Edit', post_update_path(:id => @post.id), {:class => 'icon_edit'} %>
+			<%= link_to 'Delete', post_delete_path(:id => @post.id), method: :delete, :class => 'icon_delete', data: { confirm: 'Are you sure?' } %>
+		</div>
+		<div class="post_info_border"></div>
+		<% end %>
+	</div>
+	
+	<div class="show_comment_block">
+		<div class="left_align">
+			<span class="icon_like">
+				<%= !@post.likes.empty? ? @post.likes.size.to_s : '0' %> Like(s)
+			</span>
+			<span class="icon_comment">
+			<%= !@post.comments.empty? ? @post.comments.size.to_s : '0' %> Comment(s)
+			</span>
+		</div>
+		<div class="right_align">
+			<% if user_signed_in? %>
+			<%= render 'likeform' %>
+			<% end %>
+			<%= link_to 'Leave Comment', '#new_comment', {:class => 'new_comment_button', :id => 'new_comment_button'} %>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="list_comment_block">
+	<% if !@post.comments.empty? %>
+		<% @post.comments.each do |comment| %>
+			<div class="comment_block" id=<%= 'comment_' + comment.id.to_s %>>
+				<div class="comment_content">
+					<div class="comment_content_text">
+					<%= comment.content %>
+					</div>
+					<div class="comment_content_button">
+						<% if user_signed_in? %>
+						<%= render 'likecommentform', :comment => comment %> <span style="color:#646869;">|</span> 
+						<% end %>
+						<%= link_to 'Comment', '#new_subcomment', {:class => 'new_subcomment_button', :id => 'commentbutton_' + comment.id.to_s} %>
+					</div>
+				</div>
+				<div class="comment_info">
+					<%= comment.author_name %><br />
+					<%= l comment.updated_at, :format => "%B %d, %Y / %H:%M" %>
+					<div class="comment_info_border"></div>
+					<% comment_like_names = '0' %>
+					<% if !comment.likes.empty? %>
+					<% comment_like_names = comment.likes.map{|el| el[:author_name]}.join(', ') %>
+					<% end %>
+					<span class="icon_like" title="<%= comment_like_names %>">
+						<%= !comment.likes.empty? ? comment.likes.size.to_s : '0' %>
+					</span>
+				</div>
+			</div>
+			<% if !comment.comments.empty? %>
+				<% comment.comments.each do |child_comment| %>
+					<div class="sub_comment_block" id=<%= 'subcomment_' + child_comment.id.to_s %>>
+						<div class="sub_comment_content">
+							<div class="comment_content_text">
+							<%= child_comment.content %>
+							</div>
+							<% if user_signed_in? %>
+							<div class="comment_content_button">
+								<%= render 'likecommentform', :comment => child_comment %>
+							</div>
+							<% end %>
+						</div>
+						<div class="sub_comment_info">
+							<%= child_comment.author_name %><br />
+							<%= l child_comment.updated_at, :format => "%B %d, %Y / %H:%M" %>
+							<div class="comment_info_border"></div>
+							<% subcomment_like_names = '0' %>
+							<% if !child_comment.likes.empty? %>
+							<% subcomment_like_names = child_comment.likes.map{|el| el[:author_name]}.join(', ') %>
+							<% end %>
+							<span class="icon_sublike" title="<%= subcomment_like_names %>">
+								<%= !child_comment.likes.empty? ? child_comment.likes.size.to_s : '0' %>
+							</span>
+						</div>
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+	<% end %>
+	</div>
+	
+	<div class="new_comment_block" id="new_comment_block">
+		<h2 class="new_comment_close">Leave Comment</h2>
+		<div class="new_comment_form">
+		<%= render 'commentform' %>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+		
+			jQuery('#new_comment_block').hide();
+			jQuery('.new_comment_close').css('cursor', 'pointer');
+
+			if(jQuery('#current_block_name').val() != ''){
+				jQuery('#new_comment_block').appendTo('#' + jQuery('#current_block_name').val());
+			}else {
+				jQuery('#new_comment_block').appendTo('.list_comment_block');
+			}
+
+			var has_errors = jQuery('#error_explanation').html();
+			if((typeof has_errors !== 'undefined') && (has_errors != null)){
+				jQuery('#new_comment_block').show();
+				jQuery('html, body').animate({
+					scrollTop: jQuery('#current_block_height').val()
+				}, 2000);
+			}
+			
+			jQuery('.new_comment_close').click(function(event){
+				<% if user_signed_in? %>
+					jQuery('.comment_content_button').slideDown();
+					jQuery('.right_align').slideDown();
+				<% else %>
+					jQuery('#new_comment_button').slideDown();
+					jQuery('.new_subcomment_button').slideDown();
+				<% end %>
+				if((typeof has_errors !== 'undefined') && (has_errors != null)){
+					jQuery('#error_explanation').remove();
+				}
+				jQuery('#new_comment_block').slideUp();
+				event.preventDefault();
+				
+			});
+			
+			jQuery('#new_comment_button').click(function(event){
+				<% if user_signed_in? %>
+					jQuery('.comment_content_button').slideUp();
+					jQuery('.right_align').slideUp();
+				<% else %>
+					jQuery('#new_comment_button').slideUp();
+					jQuery('.new_subcomment_button').slideUp();
+				<% end %>
+				jQuery('#new_comment_block').css('margin-left', '40px');
+				jQuery('#new_comment_block').appendTo('.list_comment_block');
+				jQuery('.input_comment').val('');
+				jQuery('#new_comment_block').slideDown(function(){
+					var current_height = jQuery('.block_content')[0].scrollHeight;
+					jQuery('#current_block_height').val(current_height);
+					jQuery('html, body').animate({
+						scrollTop: current_height
+					}, 2000);
+				});
+				event.preventDefault();
+			});
+			
+			jQuery('.new_subcomment_button').click(function(event){
+				<% if user_signed_in? %>
+					jQuery('.comment_content_button').slideUp();
+					jQuery('.right_align').slideUp();
+				<% else %>
+					jQuery('#new_comment_button').slideUp();
+					jQuery('.new_subcomment_button').slideUp();
+				<% end %>
+				var parent_block = jQuery(this).parent().parent().parent();
+				var comment_id = jQuery(this).prop('id').split('commentbutton_')[1];
+				var post_content_height = jQuery('.post_content')[0].scrollHeight;
+				var show_comment_height = jQuery('.show_comment_block')[0].scrollHeight;
+				var parent_id = parent_block.prop('id');
+				if(parent_id.indexOf('subcomment') > -1){
+					jQuery('#new_comment_block').css('margin-left', '0px');
+				}else {
+					jQuery('#new_comment_block').css('margin-left', '40px');
+				}
+				
+				var prev_block_height = 0;
+				if(parent_block.prevAll().length > 0){
+					parent_block.prevAll().each(function (){
+						prev_block_height += jQuery(this)[0].scrollHeight;
+					});
+				}
+				var new_scroll_height = post_content_height + show_comment_height + prev_block_height + 160;
+				
+				jQuery('#new_comment_block').appendTo(parent_block);
+				jQuery('#current_block_name').val(parent_id);
+				
+				jQuery('.input_comment').val(comment_id);
+				
+				jQuery('#new_comment_block').slideDown(function(){
+					jQuery('#current_block_height').val(new_scroll_height);
+					jQuery('html, body').animate({
+						scrollTop: new_scroll_height
+					}, 2000);
+				});
+				event.preventDefault();
+			});
+			
+		});
+	</script>
+
+</div>

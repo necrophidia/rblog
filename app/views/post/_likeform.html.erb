@@ -1,0 +1,18 @@
+<%= form_for([@post, Like.new], {:url => post_like_post_path, :method => 'put'}) do |f| %>
+  <div class="form_hide">
+    <div class="field">
+      <%= f.label :likeable_id %><br />
+      <%= f.number_field :likeable_id, {:value => @post.id, :readonly => true} %>
+    </div>
+    <div class="field">
+      <%= f.label :user_id %><br />
+      <%= f.text_field :user_id, {:value => current_user.id, :readonly => true} %>
+    </div>
+  </div>
+  
+  <% if !@post.likes.empty? && @post.likes.where(user_id:current_user.id) %>
+  	<span class="icon_liked" style="color:#646869;">You Liked This Post | </span> 
+  <% else %>
+  	<%= f.submit 'Like This Post', :class => 'like_button icon_like' %> <span style="color:#646869;">| </span> 
+  <% end %>
+<% end %>
