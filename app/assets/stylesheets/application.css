@@ -205,6 +205,7 @@ a{
 	padding: 5px;
 	font-size: 0.9em;
 	color: #ee1c4b;
+	height: 20px;
 }
 
 .new_comment_block{
@@ -459,4 +460,19 @@ ul#main_nav li a{
 .form_border{
 	border-top: #646869 1px dotted;
 	margin: 20px 0;
+}
+
+#likes_block{
+	background: #fff;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	 border-radius: 10px;
+	border: 1px solid #ee1c4b;
+	padding: 5px 10px 5px 5px;
+	margin-top: 15px;
+	display: none;
+}
+
+.likes_form, .likes_form form{
+	display: inline;
 }

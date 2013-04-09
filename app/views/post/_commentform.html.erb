@@ -2,8 +2,11 @@
   
   <%= hidden_field_tag :current_block_name, @current_block_name.nil? ? '' : @current_block_name %>
   <%= hidden_field_tag :current_block_height, @current_block_height.nil? ? '' : @current_block_height %>
-  <% author_name = user_signed_in? ? current_user.name: '' %>
-  <% author_mail = user_signed_in? ? current_user.email: '' %>
+  <% guest_name = @comment.author_name unless @comment.nil? %>
+  <% guest_mail = @comment.author_mail unless @comment.nil? %>
+  <% the_content = @comment.content unless @comment.nil? %>
+  <% author_name = user_signed_in? ? current_user.name : guest_name %>
+  <% author_mail = user_signed_in? ? current_user.email : guest_mail %>
 
   <% if !@error.nil? %>
     <div id="error_explanation">
@@ -34,7 +37,7 @@
   
   <div class="form_block">
     <div class="label"><%= f.label :content %></div>
-    <%= f.text_area :content, :cols => 55 %>
+    <%= f.text_area :content, {:cols => 55, :value => the_content} %>
   </div>
   
   <div class="form_block">

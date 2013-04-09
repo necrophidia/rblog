@@ -17,14 +17,13 @@
 		<div class="comment_like_block">
 			<% like_names = '0' %>
 			<% if !@post.likes.empty? %>
-			<% puts @post.likes.to_s %>
 			<% like_names = @post.likes.map{|el| User.find(el[:user_id]).name}.join(', ') %>
 			<% end %>
-			<span class="icon_like" title="<%= like_names %>">
+			<span id="side_like_block" class="icon_like" title="<%= like_names %>">
 				<%= !@post.likes.empty? ? @post.likes.size.to_s : '0' %>
 			</span>
 			<span class="icon_comment">
-				<%= !@post.comments.empty? ? @post.comments.size.to_s : '0' %>
+				<%= @comment_total.to_s %>
 			</span>
 		</div>
 		<div class="post_info_border"></div>
@@ -45,15 +44,26 @@
 		<div class="post_info_border"></div>
 		<% end %>
 	</div>
-	
 	<div class="show_comment_block">
 		<div class="left_align">
-			<span class="icon_like">
+			<span class="icon_like" id="post_like_block">
 				<%= !@post.likes.empty? ? @post.likes.size.to_s : '0' %> Like(s)
 			</span>
 			<span class="icon_comment">
-			<%= !@post.comments.empty? ? @post.comments.size.to_s : '0' %> Comment(s)
+			<%= @comment_total.to_s %> Comment(s)
 			</span>
+			<% if user_signed_in? && !@post.likes.empty? %>
+			<div id="likes_block">
+				<% @post.likes.each do |post_like| %>
+					<div class="likes_form">
+						<%= render 'likelikeform', :like => post_like %>
+					</div>
+					<% unless post_like == @post.likes.last %>
+						<span style="margin-left:-5px">, </span>
+					<% end %>
+				<% end %>
+			</div>
+			<% end %>
 		</div>
 		<div class="right_align">
 			<% if user_signed_in? %>
@@ -131,9 +141,31 @@
 		</div>
 	</div>
 	
+</div>
+
 	<script type="text/javascript">
-		jQuery(document).ready(function(){
-		
+		function page_load_script(){
+			jQuery('#post_like_block').mouseenter(function(){
+				if(jQuery('#side_like_block').text().indexOf('0') < 0 ){
+					jQuery('#likes_block').show(function (){
+						jQuery('.list_comment_block').slideUp();
+						jQuery('.left_align .icon_comment').slideUp();
+						jQuery('#new_comment_button').slideUp();
+						jQuery('.span_space').slideUp();
+						jQuery('.show_comment_block').css('margin-bottom', '35px');
+					});
+				}
+			});
+			jQuery('#likes_block').mouseleave(function(){
+				jQuery('#likes_block').hide(function (){
+					jQuery('.list_comment_block').slideDown();
+					jQuery('.left_align .icon_comment').slideDown();
+					jQuery('#new_comment_button').slideDown();
+					jQuery('.span_space').slideDown();
+					jQuery('.show_comment_block').css('margin-bottom', '0px');
+				});
+			});
+			
 			jQuery('#new_comment_block').hide();
 			jQuery('.new_comment_close').css('cursor', 'pointer');
 
@@ -228,8 +260,27 @@
 				});
 				event.preventDefault();
 			});
+		}
+		jQuery(document).ready(function(){
+
+			jQuery('form').submit(function(event) {  
+				var valuesToSubmit = jQuery(this).serialize();
+				jQuery.ajax({
+					url: jQuery(this).prop('action'),
+					data: valuesToSubmit,
+					method: 'put',
+					dataType: "JSON"
+				}).success(function(post_id){
+					jQuery.get('/post/view?id=' + post_id, function(data) {
+						var new_page_content = jQuery(data).find('.block_content').html();
+						jQuery('.block_content').html(new_page_content);
+						page_load_script();
+					});
+				});
+				event.preventDefault();
+			});
+		
+			page_load_script();
 			
 		});
 	</script>
-
-</div>

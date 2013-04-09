@@ -1,4 +1,8 @@
 RBlog::Application.routes.draw do
+
+  get "api/index"
+
+  get "api/show"
   
   get "post/index"
 
@@ -15,6 +19,8 @@ RBlog::Application.routes.draw do
   put "post/like_post"
 
   put "post/like_comment"
+
+  put "post/like_like"
 
   delete "post/delete"
 

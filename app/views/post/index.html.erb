@@ -26,7 +26,14 @@
 					<%= !post.likes.empty? ? post.likes.size.to_s : '0' %>
 				</span>
 				<span class="icon_comment">
-					<%= !post.comments.empty? ? post.comments.size.to_s : '0' %>
+					<% comment_total = 0 %>
+    				<% if !post.comments.empty? %>
+      				<% comment_total += post.comments.size %>
+    				<% end %>
+    				<% if !post.child_comments.empty? %>
+      				<% comment_total += post.child_comments.size %>
+    				<% end %>
+					<%= comment_total.to_s %>
 				</span>
 			</div>
 			<div class="post_info_border"></div>

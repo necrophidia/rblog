@@ -11,7 +11,7 @@
   </div>
   
   <% if !@post.likes.empty? && !@post.likes.where(:user_id => current_user.id).blank? %>
-  	<span class="icon_liked" style="color:#646869;">You Liked This Post | </span> 
+  	<span class="icon_liked" style="color:#646869;">You Liked This Post <span class="span_space">| </span></span> 
   <% else %>
   	<%= f.submit 'Like This Post', :class => 'like_button icon_like' %> <span style="color:#646869;">| </span> 
   <% end %>
