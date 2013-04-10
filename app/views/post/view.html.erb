@@ -145,6 +145,21 @@
 
 	<script type="text/javascript">
 		function page_load_script(){
+
+			jQuery('form').submit(function(event) {  
+				var valuesToSubmit = jQuery(this).serialize();
+				jQuery.ajax({
+					url: jQuery(this).prop('action'),
+					data: valuesToSubmit,
+					method: 'put',
+					dataType: "JSON"
+				}).success(function(post_id){
+					socket.emit('update_like_comment');
+					reload_data();
+				});
+				event.preventDefault();
+			});
+			
 			jQuery('#post_like_block').mouseenter(function(){
 				if(jQuery('#side_like_block').text().indexOf('0') < 0 ){
 					jQuery('#likes_block').show(function (){
@@ -261,24 +276,36 @@
 				event.preventDefault();
 			});
 		}
-		jQuery(document).ready(function(){
 
-			jQuery('form').submit(function(event) {  
-				var valuesToSubmit = jQuery(this).serialize();
-				jQuery.ajax({
-					url: jQuery(this).prop('action'),
-					data: valuesToSubmit,
-					method: 'put',
-					dataType: "JSON"
-				}).success(function(post_id){
-					jQuery.get('/post/view?id=' + post_id, function(data) {
-						var new_page_content = jQuery(data).find('.block_content').html();
-						jQuery('.block_content').html(new_page_content);
-						page_load_script();
-					});
-				});
-				event.preventDefault();
+		function reload_data(){
+			jQuery.get(document.location.href, function(data) {
+				var new_post_contents = jQuery(data).find('.block_content').html();
+				jQuery('.block_content').html(new_post_contents);
+				page_load_script();
 			});
+		}
+
+		var socket = io.connect('http://localhost:5001');
+
+		socket.on('connect', function () {
+
+			var newly_created_post = jQuery('#flash_notice');
+			if((typeof newly_created_post.html() !== 'undefined') && (newly_created_post != null)){
+				socket.emit('new_post', '<%= @post.id %>');
+			}
+
+			var newly_updated_post = jQuery('#flash_updated');
+			if((typeof newly_updated_post.html() !== 'undefined') && (newly_updated_post != null)){
+				socket.emit('update_post');
+			}
+
+			socket.on('post_liked_or_commented', function (data) {
+				reload_data();
+			});
+
+		});
+
+		jQuery(document).ready(function(){
 		
 			page_load_script();
 			

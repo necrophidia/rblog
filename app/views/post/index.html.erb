@@ -1,3 +1,36 @@
+<script type="text/javascript">
+
+	function reload_data(){
+		jQuery.get(document.location.href, function(data) {
+			var new_post_list = jQuery(data).find('#main_page').html();
+			jQuery('#main_page').html(new_post_list);
+		});
+	}
+
+	var socket = io.connect('http://localhost:5001');
+
+	socket.on('connect', function () {
+		socket.on('post_created', function (data) {
+			reload_data();
+		});
+
+		socket.on('post_deleted', function (data) {
+			reload_data();
+		});
+
+		socket.on('post_updated', function (data) {
+			reload_data();
+		});
+
+		var newly_deleted_post = jQuery('#flash_deleted');
+		if((typeof newly_deleted_post.html() !== 'undefined') && (newly_deleted_post != null)){
+			socket.emit('delete_post');
+		}
+	});
+
+</script>
+
+<div id="main_page">
 <% @posts.each do |post| %>
 	<div class="block_content">
 		<h2>
@@ -56,3 +89,4 @@
 		</div>
 	</div>
 <% end %>
+</div>

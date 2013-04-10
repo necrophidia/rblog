@@ -14,6 +14,8 @@ RBlog::Application.routes.draw do
 
   put "post/new"
 
+  put "post/update_post"
+
   put "post/new_comment"
 
   put "post/like_post"

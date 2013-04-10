@@ -16,3 +16,6 @@
 
 # Ignore application configuration
 /config/application.yml
+
+# Node JS Modules
+/realtime/node_modules

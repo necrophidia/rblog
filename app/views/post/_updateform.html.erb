@@ -1,0 +1,49 @@
+<%= form_for(@post, {:url => post_update_post_path, :method => 'put'}) do |f| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+      <% @post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form_hide">
+    <div class="form_block">
+      <%= f.hidden_field :id, {:size => 112, :value => @post.id, :readonly => true} %>
+    </div>
+
+    <div class="form_block">
+      <div class="label"><%= f.label :author_name %></div>
+      <%= f.text_field :author_name, {:size => 112, :value => @post.author_name, :readonly => true} %>
+    </div>
+    
+    <div class="form_block">
+      <div class="label"><%= f.label :author_mail %></div>
+      <%= f.text_field :author_mail, {:size => 112, :value => @post.author_mail, :readonly => true} %>
+    </div>
+  </div>
+
+  <div class="form_block">
+    <div class="label"><%= f.label :title %></div>
+    <%= f.text_field :title, {:size => 112, :value => @post.title} %>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"><%= f.label :content %></div>
+    <%= f.text_area :content, {:cols => 80 , :value => @post.content}%>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"><%= f.label :tag %></div>
+    <%= f.text_field :tag, {:size => 112, :value => @post.tag} %>
+  	<br /><i><span class="label"></span>(use comma for multiple tags)</i>
+  </div>
+  
+  <div class="form_block">
+    <div class="label"></div>
+    <%= f.submit %>
+  </div>
+<% end %>

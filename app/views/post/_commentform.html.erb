@@ -27,17 +27,17 @@
   
   <div class="form_block">
     <div class="label"><%= f.label :author_name %></div>
-    <%= f.text_field :author_name, {:size => 76, :value => author_name, :readonly => user_signed_in?} %>
+    <%= f.text_field :author_name, {:size => 56, :value => author_name, :readonly => user_signed_in?} %>
   </div>
   
   <div class="form_block">
     <div class="label"><%= f.label :author_mail %></div>
-    <%= f.text_field :author_mail, {:size => 76, :value => author_mail, :readonly => user_signed_in?} %>
+    <%= f.text_field :author_mail, {:size => 56, :value => author_mail, :readonly => user_signed_in?} %>
   </div>
   
   <div class="form_block">
     <div class="label"><%= f.label :content %></div>
-    <%= f.text_area :content, {:cols => 55, :value => the_content} %>
+    <%= f.text_area :content, {:cols => 45, :value => the_content} %>
   </div>
   
   <div class="form_block">

@@ -361,12 +361,12 @@ ul#main_nav li a{
 	bottom: 0;
 }
 
-#flash_notice, #flash_alert {
+#flash_notice, #flash_alert, #flash_deleted, #flash_updated {
   padding: 5px 8px;
   margin: 10px 0;
 }
 
-#flash_notice {
+#flash_notice, #flash_deleted, #flash_updated {
   background-color: #CFC;
   border: solid 1px #6C6;
 }

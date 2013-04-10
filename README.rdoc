@@ -4,7 +4,19 @@ R Blog v0.1
 R Blog is a simple blog application based on Ruby on Rails.
 
 
+Installation
+
 Run 'rake db:create' then 'rake db:migrate' to create the database.
 
+Run 'bundle install' to install all the bundles required.
 
 Run 'rails server' to start the blog.
+
+
+Enabling Long Pulling (with NodeJS)
+
+Go to 'realtime' directory.
+
+Run 'npm install' to install required NPM (might need administrator privileges).
+
+Run 'node realtime-server.js' to start the realtime listener

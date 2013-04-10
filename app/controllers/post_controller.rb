@@ -12,7 +12,11 @@ class PostController < ApplicationController
   	if !params[:post].nil? && !params[:post].empty?
   		@post = Post.new(params[:post])
   		if @post.save
-  			redirect_to :action => 'view', :id => @post.id
+        flash[:notice] = "The post has been successfully created."
+        respond_to do |format|
+          format.html { redirect_to :action => 'view', :id => @post.id }
+          format.json { render json: @post.id, status: :created }
+        end
   		end
   	else
   		@post = Post.new
@@ -20,6 +24,7 @@ class PostController < ApplicationController
   end
 
   def view
+    @notice = params[:notice] unless params[:notice].nil? && params[:notice].blank?
   	@post = Post.find(params[:id])
     @comment_total = 0
     if !@post.comments.empty?
@@ -31,6 +36,27 @@ class PostController < ApplicationController
   end
 
   def update
+    @post = Post.find(params[:id])
+  end
+
+  def update_post
+    @post = Post.find(params[:post][:id])
+    if @post.update_attributes(params[:post])
+      flash[:updated] = "The post has been successfully updated."
+      respond_to do |format|
+        format.html { redirect_to :action => 'view', :id => @post.id }
+        format.json { render json: @post.id, status: :created }
+      end
+    else
+      render :action => 'update'
+    end
+  end
+
+  def delete 
+    @post = Post.find(params[:id])
+    @post.destroy
+    flash[:deleted] = "The post has been successfully deleted."
+    redirect_to :action => 'index'
   end
 
   def like_post

@@ -1,0 +1,8 @@
+{
+  "name" : "RBlog-real-time-data",
+  "description" : "providing real-time data synchronizing for RBlog",
+  "version" : "0.0.1",
+  "dependencies" : {
+    "socket.io" : "0.9.12"
+  }
+}
