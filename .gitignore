@@ -17,5 +17,8 @@
 # Ignore application configuration
 /config/application.yml
 
-# Node JS Modules
+# Ignore Node JS Modules
 /realtime/node_modules
+
+# Ignore DS_STORE created from OSX
+.DS_Store

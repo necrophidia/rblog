@@ -1,4 +1,4 @@
-R Blog v0.1
+R Blog v1.0.0
 
 
 R Blog is a simple blog application based on Ruby on Rails.
